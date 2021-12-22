@@ -1,6 +1,5 @@
 from numpy import *
 import operator
-from math import log
 
 
 # 计算香农熵
@@ -45,7 +44,6 @@ def chooseBestFeatureToSplit(dataSet):
     baseEntropy = calcShannonEnt(dataSet)
     bestInfoGain = 0.0
     bestFeature = -1
-
     for i in range(numFeatures):
         # 获取目标特征的所有属性
         featList = [example[i] for example in dataSet]
@@ -59,8 +57,28 @@ def chooseBestFeatureToSplit(dataSet):
             prob = len(subDataSet) / float(len(dataSet))
             newEntropy += prob * calcShannonEnt(subDataSet)
         infoGain = baseEntropy - newEntropy
-        # 如果信息增益最大，则存储该特征为划分值
+        # 如果信息增益率最大，则存储该特征为划分值
         if infoGain > bestInfoGain:
             bestInfoGain = infoGain
             bestFeature = i
     return bestFeature
+
+
+# 对数据列表 统计每个分类的数量 并返回数量最多的种类
+def majorityCnt(classList):
+    classCount = {}
+    for vote in classList:
+        if vote not in classCount.keys(): classCount[vote] = 0
+        classCount[vote] += 1
+    sortedClassCount = sorted(classCount.iteritemsd(), key=operator.itemgetter(1), reverse=True)
+    return sortedClassCount[0][0]
+
+
+def createTree(dataSet, labels):
+    classList = [example[-1] for example in dataSet]
+    if classList.count(classList[0]) == len(classList):
+        return classList[0]
+    if len(dataSet[0]) == 1:
+        return classList[0]
+
+
