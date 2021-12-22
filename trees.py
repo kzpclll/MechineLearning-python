@@ -45,16 +45,22 @@ def chooseBestFeatureToSplit(dataSet):
     baseEntropy = calcShannonEnt(dataSet)
     bestInfoGain = 0.0
     bestFeature = -1
+
     for i in range(numFeatures):
+        # 获取目标特征的所有属性
         featList = [example[i] for example in dataSet]
+        # 创建无重复属性集合
         uniqueVials = set(featList)
         newEntropy = 0.0
+        # 遍历每个属性，计算单个属性划分之后的信息增益大小
+        # 累加所有属性的加权信息增益，计算增益率
         for value in uniqueVials:
             subDataSet = splitDataSet(dataSet, i, value)
             prob = len(subDataSet) / float(len(dataSet))
             newEntropy += prob * calcShannonEnt(subDataSet)
         infoGain = baseEntropy - newEntropy
+        # 如果信息增益最大，则存储该特征为划分值
         if infoGain > bestInfoGain:
             bestInfoGain = infoGain
-            bestFeature = 1
+            bestFeature = i
     return bestFeature
